@@ -65,8 +65,10 @@ function drawParallelogram() {
     lines.push(createLine(x4,y4, x1,y1));
     document.getElementById('parallelogram').innerHTML = lines.join("");
 
+    drawCircle(x1, x2, x3, y1, y2, y3);
+
     /* Non blocking test, print errors in console if tests fail */
-    testParallelogram(x1, x2, x3, x4, y1, y2, y3, y4);
+    //testParallelogram(x1, x2, x3, x4, y1, y2, y3, y4);
 }
 
 function createLine(x1,y1, x2,y2){
@@ -106,4 +108,33 @@ function testParallelogram(x1, x2, x3, x4, y1, y2, y3, y4) {
     console.assert(Math.abs(angle1 - angle3) === 180, 'Lines are not parallel');
     console.assert(Math.round(length2) === Math.round(length4), 'Lines are not the same length');
     console.assert(Math.abs(angle2 - angle4) === 180, 'Lines are not parallel');
+}
+
+function drawCircle(x1, x2, x3, y1, y2, y3) {
+    const length1 = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
+    const length2 = Math.sqrt((x2-x3)*(x2-x3) + (y2-y3)*(y2-y3));
+    const length3 = Math.sqrt((x3-x1)*(x3-x1) + (y3-y1)*(y3-y1));
+    const cosAlpha = (length1^2 - length2^2 + length3^2) / (2 + length1 * length3)
+    console.log(cosAlpha);
+    const altitude = Math.sqrt(length1^2 * (1 - cosAlpha^2));
+    const parallelogramArea = length1 * altitude;
+    console.log(length1, length2, altitude, parallelogramArea);
+    const diameter = 2 * Math.sqrt(parallelogramArea / Math.PI);
+    xCircle = (x1 + x3) / 2 - diameter / 2;
+    yCircle = (y1 + y3) / 2 - diameter / 2;
+    const circleStyle = `
+        position:absolute;
+        left:${xCircle}px;
+        top:${yCircle}px;
+        width:${diameter}px;
+        height:${diameter}px;
+    `
+    const circle = `
+        <div
+            class="circle"
+            style="${circleStyle}"
+        >
+        </div>
+    `
+    document.getElementById('circle').innerHTML = circle;
 }
