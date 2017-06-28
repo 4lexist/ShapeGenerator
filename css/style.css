@@ -1,0 +1,10 @@
+canvas {
+  border: 1px solid #666;
+}
+
+.dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background-color: #FF0000;
+}
