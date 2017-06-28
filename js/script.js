@@ -1,15 +1,17 @@
+document.onclick = clickAction;
+
 let dots = [{x:0, y:0}, {x:0, y:0}, {x:0, y:0}]
 let nbDots = 0;
 const dotSize = 11;
-document.onclick = clickAction;
+
+let dragId = null;
+
 
 function clickAction(event) {
     if(nbDots < 3) {
         nbDots += 1;
         createDot(nbDots, event);
-    }
-    if(nbDots === 3) {
-        drawParallelogram();
+        nbDots === 3 && drawShapes();
     }
 }
 
@@ -23,7 +25,10 @@ function createDot(index, event) {
         <div
             class="dot",
             id="dot${index}",
-            style="${dotStyle}"
+            style="${dotStyle}",
+            draggable="true",,
+            ondragstart="onDrag(${index})",
+            ondragend="onDragEnd()"
         >
         </div>
     `
@@ -48,8 +53,7 @@ function updateDotList(index, event) {
     document.getElementById('dotList').innerHTML += li;
 }
 
-function drawParallelogram() {
-    console.log("draw");
+function drawShapes() {
     const x1 = dots[0].x + dotSize / 2;
     const x2 = dots[1].x + dotSize / 2;
     const x3 = dots[2].x + dotSize / 2;
@@ -58,17 +62,20 @@ function drawParallelogram() {
     const y2 = dots[1].y + dotSize / 2;
     const y3 = dots[2].y + dotSize / 2;
     const y4 = dots[0].y + (dots[2].y - dots[1].y) + dotSize / 2;
-    let lines = [];
-    lines.push(createLine(x1,y1, x2,y2));
-    lines.push(createLine(x2,y2, x3,y3));
-    lines.push(createLine(x3,y3, x4,y4));
-    lines.push(createLine(x4,y4, x1,y1));
-    document.getElementById('parallelogram').innerHTML = lines.join("");
-
+    drawParallelogram(x1, x2, x3, x4, y1, y2, y3, y4);
     drawCircle(x1, x2, x3, y1, y2, y3);
 
     /* Non blocking test, print errors in console if tests fail */
-    //testParallelogram(x1, x2, x3, x4, y1, y2, y3, y4);
+    testParallelogram(x1, x2, x3, x4, y1, y2, y3, y4);
+}
+
+function drawParallelogram(x1, x2, x3, x4, y1, y2, y3, y4) {
+  let lines = [];
+  lines.push(createLine(x1,y1, x2,y2));
+  lines.push(createLine(x2,y2, x3,y3));
+  lines.push(createLine(x3,y3, x4,y4));
+  lines.push(createLine(x4,y4, x1,y1));
+  document.getElementById('parallelogram').innerHTML = lines.join("");
 }
 
 function createLine(x1,y1, x2,y2){
@@ -104,24 +111,18 @@ function testParallelogram(x1, x2, x3, x4, y1, y2, y3, y4) {
     const length4 = Math.sqrt((x4-x1)*(x4-x1) + (y4-y1)*(y4-y1));
     const angle4  = Math.atan2(y1 - y4, x1 - x4) * 180 / Math.PI;
 
-    console.assert(Math.round(length1) === Math.round(length3), 'Lines are not the same length');
-    console.assert(Math.abs(angle1 - angle3) === 180, 'Lines are not parallel');
-    console.assert(Math.round(length2) === Math.round(length4), 'Lines are not the same length');
-    console.assert(Math.abs(angle2 - angle4) === 180, 'Lines are not parallel');
+    console.assert(Math.round(length1) === Math.round(length3), `Lines are not the same length`);
+    console.assert(Math.round(Math.abs(angle1 - angle3)) === 180, `Lines are not parallel`);
+    console.assert(Math.round(length2) === Math.round(length4), `Lines are not the same length`);
+    console.assert(Math.round(Math.abs(angle2 - angle4)) === 180, `Lines are not parallel`);
 }
 
 function drawCircle(x1, x2, x3, y1, y2, y3) {
-    const length1 = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
-    const length2 = Math.sqrt((x2-x3)*(x2-x3) + (y2-y3)*(y2-y3));
-    const length3 = Math.sqrt((x3-x1)*(x3-x1) + (y3-y1)*(y3-y1));
-    const cosAlpha = (length1^2 - length2^2 + length3^2) / (2 + length1 * length3)
-    console.log(cosAlpha);
-    const altitude = Math.sqrt(length1^2 * (1 - cosAlpha^2));
-    const parallelogramArea = length1 * altitude;
-    console.log(length1, length2, altitude, parallelogramArea);
-    const diameter = 2 * Math.sqrt(parallelogramArea / Math.PI);
-    xCircle = (x1 + x3) / 2 - diameter / 2;
-    yCircle = (y1 + y3) / 2 - diameter / 2;
+    const areaParallelogram = Math.abs((x2-x1)*(y3-y1) - (x3-x1)*(y2-y1));
+    const radius = Math.sqrt(areaParallelogram / Math.PI);
+    const diameter = 2 * radius;
+    xCircle = (x1 + x3) / 2 - radius;
+    yCircle = (y1 + y3) / 2 - radius;
     const circleStyle = `
         position:absolute;
         left:${xCircle}px;
@@ -137,4 +138,33 @@ function drawCircle(x1, x2, x3, y1, y2, y3) {
         </div>
     `
     document.getElementById('circle').innerHTML = circle;
+
+    const areaCircle = Math.PI * radius * radius;
+    const lis = `
+        <li>
+            Parallelogram area : ${areaParallelogram} square px
+        </li>
+        <li>
+            Circle area : ${Math.round(areaCircle)} square px
+        </li>
+    `
+    document.getElementById('areaList').innerHTML += lis;
+}
+
+// TODO: Remove ghost image
+function onDrag(index) {
+    let xDot, yDot;
+    document.ondragover = function() {
+        const dotStyle = `
+            position:absolute;
+            left:${dotPosition(window.event).x}px;
+            top:${dotPosition(window.event).y}px
+        `
+        document.getElementById(`dot${index}`).style = dotStyle;
+        document.getElementById(`dot${index}coordinate`).innerHTML = 'lol';
+    }
+}
+
+function onDragEnd() {
+    clearInterval(dragId);
 }
