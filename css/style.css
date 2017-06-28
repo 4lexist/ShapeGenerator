@@ -1,10 +1,29 @@
-canvas {
-  border: 1px solid #666;
-}
-
 .dot {
     width: 11px;
     height: 11px;
     border-radius: 50%;
     background-color: #FF0000;
+}
+
+.dot::after {
+    position: relative;
+    bottom: 20px;
+    left: 2px;
+}
+
+#dot1::after {
+    content:'1';
+}
+#dot2::after {
+    content:'2';
+}
+#dot3::after {
+    content:'3';
+}
+
+.line {
+    height: 1px;
+    background-color: #FFFF00;
+    transform-origin: 0 100%;
+    z-index: 1;
 }
