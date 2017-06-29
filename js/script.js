@@ -5,13 +5,25 @@ let nbDots = 0;
 const dotSize = 11;
 
 let dragId = null;
+let clickType = '';
 
 
 function clickAction(event) {
-    if(nbDots < 3) {
-        nbDots += 1;
-        createDot(nbDots, event);
-        nbDots === 3 && drawShapes();
+    console.log("clickAction", clickType);
+    switch (clickType) {
+        case 'showAbout':
+            document.getElementById(`about`).onclick = hideAbout;
+            break;
+        case 'hideAbout':
+            document.getElementById(`about`).onclick = showAbout;
+            clickType = '';
+            break;
+        default: if(nbDots < 3) {
+            nbDots += 1;
+            createDot(nbDots, event);
+            nbDots === 3 && drawShapes();
+        }
+        break;
     }
 }
 
@@ -50,7 +62,7 @@ function updateDotList(index, event) {
             Dot ${index} coordinate : {x:${dots[index-1].x}, y:${dots[index-1].y}}
         </li>
     `
-    document.getElementById('dotList').innerHTML += li;
+    document.getElementById('dotsList').innerHTML += li;
 }
 
 function drawShapes() {
@@ -148,23 +160,53 @@ function drawCircle(x1, x2, x3, y1, y2, y3) {
             Circle area : ${Math.round(areaCircle)} square px
         </li>
     `
-    document.getElementById('areaList').innerHTML += lis;
+    document.getElementById('areasList').innerHTML = lis;
 }
 
 // TODO: Remove ghost image
 function onDrag(index) {
-    let xDot, yDot;
     document.ondragover = function() {
+        dots[index - 1].x = dotPosition(window.event).x;
+        dots[index - 1].y = dotPosition(window.event).y;
         const dotStyle = `
             position:absolute;
-            left:${dotPosition(window.event).x}px;
-            top:${dotPosition(window.event).y}px
+            left:${dots[index-1].x}px;
+            top:${dots[index-1].y}px
         `
         document.getElementById(`dot${index}`).style = dotStyle;
-        document.getElementById(`dot${index}coordinate`).innerHTML = 'lol';
+        document.getElementById(`dot${index}coordinate`).innerHTML = `Dot ${index} coordinate : {x:${dots[index-1].x}, y:${dots[index-1].y}}`;
+        drawShapes();
     }
 }
 
 function onDragEnd() {
     clearInterval(dragId);
+}
+
+document.getElementById(`reset`).onclick = reset;
+function reset() {
+    setTimeout(function(){ // setTimeout needed to erase the dot created onclick
+        dots = [{x:0, y:0}, {x:0, y:0}, {x:0, y:0}]
+        nbDots = 0;
+
+        document.getElementById('dotsList').innerHTML = '';
+        document.getElementById('areasList').innerHTML = '';
+        document.getElementById('container').innerHTML = `
+            <div id='parallelogram'></div>
+            <div id='circle'></div>
+        `
+    }, 10);
+}
+
+document.getElementById(`about`).onclick = showAbout;
+function showAbout() {
+    console.log("showAbout");
+    clickType = 'showAbout';
+    document.getElementById('about-details').style = 'display:block';
+}
+
+function hideAbout() {
+    console.log("hideAbout");
+    clickType = 'hideAbout';
+    document.getElementById('about-details').style = '';
 }

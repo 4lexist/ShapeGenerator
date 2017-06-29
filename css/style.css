@@ -33,6 +33,30 @@
     border: solid 1px #FFFF00;
 }
 
-#dot1 > img {
-    opacity: 0;
+button {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+#about {
+    position: fixed;
+    top: 30px;
+    right: 20px;
+}
+
+#about-details {
+    width: 500px;
+    /* border: solid 1px #000000; */
+    background-color: #FFFFFF;
+    margin: 3px 5px 10px;
+    color: black;
+    text-shadow: none;
+    text-align: justify;
+    display: none;
+}
+
+#about-details p {
+    padding: 10px;
+    font-size: 13px;
 }

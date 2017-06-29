@@ -13,16 +13,30 @@
 </head>
 
 <body>
-  <h1> Hello World </h1>
-  <p> Click on three different points on the screen and create shapes linking those points. </p>
-  <ul id='dotList'></ul>
-  <ul id='areaList'></ul>
+  <h1> Shape Generator </h1>
+  <p> Click on three different points on the screen and create shapes linking those points. 
+      Once the dots have been set, feel free to drag them around and watch the shapes evolve.</p>
+  <ul id='dotsList'></ul>
+  <ul id='areasList'></ul>
 
-  <div id="container">
-      <div id="parallelogram"></div>
-      <div id="circle"></div>
+  <div id='container'>
+      <div id='parallelogram'></div>
+      <div id='circle'></div>
   </div>
 
+  <button id='about' type='button' title='Click here to find more about this page'>About
+      <div id='about-details'>
+          <p> This webpage was built by <a href="mailto:alexis@toromanoff.org">Alexis Toromanoff</a>,
+              a French engineering school graduate student that is looking for a job in Front-end development or JavaScript development.
+          </p>
+          <p> This was requested by <a href="https://www.recordunion.com/" target="_blank">
+              Record Union</a>, a Swedish company running a distribution platform
+              that puts artists’ music on Spotify, iTunes, Google Play and more.
+          </p>
+          <p> Thank you for looking at it !</p>
+      </div>
+  </button>
+  <p> To start again, click on this button : <button id='reset' type='button'>Reset</button></p>
 
   <script src="js/script.js"></script>
 </body>
