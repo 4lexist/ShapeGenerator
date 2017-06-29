@@ -62,7 +62,7 @@ function updateDotList(index, event) {
             Dot ${index} coordinate : {x:${dots[index-1].x}, y:${dots[index-1].y}}
         </li>
     `
-    document.getElementById('dotsList').innerHTML += li;
+    document.getElementById('dotsInfo').innerHTML += li;
 }
 
 function drawShapes() {
@@ -160,7 +160,7 @@ function drawCircle(x1, x2, x3, y1, y2, y3) {
             Circle area : ${Math.round(areaCircle)} square px
         </li>
     `
-    document.getElementById('areasList').innerHTML = lis;
+    document.getElementById('areasInfo').innerHTML = lis;
 }
 
 // TODO: Remove ghost image
@@ -189,8 +189,8 @@ function reset() {
         dots = [{x:0, y:0}, {x:0, y:0}, {x:0, y:0}]
         nbDots = 0;
 
-        document.getElementById('dotsList').innerHTML = '';
-        document.getElementById('areasList').innerHTML = '';
+        document.getElementById('dotsInfo').innerHTML = '';
+        document.getElementById('areasInfo').innerHTML = '';
         document.getElementById('container').innerHTML = `
             <div id='parallelogram'></div>
             <div id='circle'></div>

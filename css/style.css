@@ -1,3 +1,13 @@
+p {
+    max-width: 550px;
+}
+
+button {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
 .dot {
     width: 11px;
     height: 11px;
@@ -31,12 +41,6 @@
 .circle {
     border-radius: 50%;
     border: solid 1px #FFFF00;
-}
-
-button {
-    color: white;
-    border-radius: 4px;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 #about {
