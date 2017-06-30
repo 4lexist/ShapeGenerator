@@ -9,7 +9,6 @@ let clickType = '';
 
 
 function clickAction(event) {
-    console.log("clickAction", clickType);
     switch (clickType) {
         case 'showAbout':
             document.getElementById(`about`).onclick = hideAbout;
@@ -165,9 +164,9 @@ function drawCircle(x1, x2, x3, y1, y2, y3) {
 
 // TODO: Remove ghost image
 function onDrag(index) {
-    document.ondragover = function() {
-        dots[index - 1].x = dotPosition(window.event).x;
-        dots[index - 1].y = dotPosition(window.event).y;
+    document.ondragover = function(event) {
+        dots[index - 1].x = dotPosition(event).x;
+        dots[index - 1].y = dotPosition(event).y;
         const dotStyle = `
             position:absolute;
             left:${dots[index-1].x}px;
@@ -200,13 +199,11 @@ function reset() {
 
 document.getElementById(`about`).onclick = showAbout;
 function showAbout() {
-    console.log("showAbout");
     clickType = 'showAbout';
     document.getElementById('about-details').style = 'display:block';
 }
 
 function hideAbout() {
-    console.log("hideAbout");
     clickType = 'hideAbout';
     document.getElementById('about-details').style = '';
 }
