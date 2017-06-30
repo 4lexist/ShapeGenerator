@@ -172,7 +172,7 @@ function onDrag(index) {
             left:${dots[index-1].x}px;
             top:${dots[index-1].y}px
         `
-        document.getElementById(`dot${index}`).style = dotStyle;
+        document.getElementById(`dot${index}`).style = dotStyle; // TODO: fix issues with Safari
         document.getElementById(`dot${index}coordinate`).innerHTML = `Dot ${index} coordinate : {x:${dots[index-1].x}, y:${dots[index-1].y}}`;
         drawShapes();
     }

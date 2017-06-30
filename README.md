@@ -10,6 +10,9 @@ Quick JS assignment for hiring purpose - The goal of this task is to write a sim
 You can click anywhere on the screen, your first three clicks will create 3 red dots that will generate a parallelogram and a circle of same area and center. Once the three dots placed, you can then drag them wherever you want and watch the shapes evolve accordingly.
 
 ## Next steps
-* Add browser compatibility (it currently works only on Chrome)
+* Add browser compatibility
+    * Works best on Chrome (and Opera)
+    * It is ugly on Firefox and the drag event is not triggered easily
+    * It does not work totally on Safari
 * Improve style
 * Remove ghost image when dragging dots
